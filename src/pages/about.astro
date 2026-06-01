@@ -1,0 +1,18 @@
+---
+import Breadcrumbs from '@/components/breadcrumbs.astro'
+import PageHead from '@/components/page-head.astro'
+import Layout from '@/layouts/layout.astro'
+---
+
+<Layout class="max-w-3xl">
+  <PageHead slot="head" title="About" />
+  <Breadcrumbs items={[{ label: 'About', icon: 'lucide:info' }]} />
+
+  <section>
+    <div class="prose">
+      <p class="text-foreground/60 mt-0">
+        About page en cours de construction.
+      </p>
+    </div>
+  </section>
+</Layout>
