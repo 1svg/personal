@@ -10,7 +10,7 @@ import { Icon } from 'astro-icon/components'
   <PageHead
     slot="head"
     title="Budget Tool"
-    description="Calcule ton budget mensuel et répartis ton allocation libre."
+    description="Calculate your monthly budget and distribute your free allocation."
   />
 
   <Breadcrumbs
@@ -34,7 +34,7 @@ import { Icon } from 'astro-icon/components'
                 for="income-input"
                 class="text-muted-foreground text-xs font-medium"
               >
-                Revenu total
+                Total Income
               </label>
               <input
                 id="income-input"
@@ -51,7 +51,7 @@ import { Icon } from 'astro-icon/components'
                 for="fixed-input"
                 class="text-muted-foreground text-xs font-medium"
               >
-                Frais fixes
+                Fixed Expenses
               </label>
               <input
                 id="fixed-input"
@@ -70,7 +70,7 @@ import { Icon } from 'astro-icon/components'
         >
           <div>
             <p class="text-muted-foreground text-xs font-medium">
-              Allocation libre
+              Free Allocation
             </p>
             <p id="free-output" class="mt-1 font-mono text-lg font-semibold">
               0,00 €
@@ -79,7 +79,7 @@ import { Icon } from 'astro-icon/components'
 
           <div>
             <p class="text-muted-foreground text-xs font-medium">
-              Reste non attribué
+              Remaining Unallocated
             </p>
             <p
               id="remaining-output"
@@ -97,7 +97,7 @@ import { Icon } from 'astro-icon/components'
         <div
           class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
         >
-          <CardTitle>Enveloppes</CardTitle>
+          <CardTitle>Envelopes</CardTitle>
 
           <div class="flex flex-wrap gap-2">
             <button
@@ -107,7 +107,7 @@ import { Icon } from 'astro-icon/components'
             >
               <span class="flex items-center gap-1.5">
                 <Icon name="lucide:plus" class="size-3.5" />
-                Ajouter
+                Add Envelope
               </span>
             </button>
 
@@ -131,7 +131,7 @@ import { Icon } from 'astro-icon/components'
             id="empty-envelopes"
             class="border-border text-muted-foreground rounded-md border border-dashed px-4 py-8 text-center text-sm"
           >
-            Aucune enveloppe. Clique sur “Ajouter” pour commencer.
+            No envelopes added. Click “Add Envelope” to get started.
           </div>
         </div>
       </CardContent>
@@ -254,7 +254,7 @@ import { Icon } from 'astro-icon/components'
 
       row.innerHTML = `
         <div class="space-y-2">
-          <label class="text-muted-foreground text-xs font-medium">Libellé</label>
+          <label class="text-muted-foreground text-xs font-medium">Label</label>
           <input
             type="text"
             data-envelope-label
@@ -278,7 +278,7 @@ import { Icon } from 'astro-icon/components'
         </div>
 
         <div class="space-y-2">
-          <p class="text-muted-foreground text-xs font-medium">Montant</p>
+          <p class="text-muted-foreground text-xs font-medium">Amount</p>
           <p data-envelope-amount class="font-mono text-sm font-semibold leading-9">0,00 €</p>
         </div>
 
@@ -286,8 +286,8 @@ import { Icon } from 'astro-icon/components'
           type="button"
           data-remove-envelope
           class="border-border bg-background hover:bg-muted inline-flex h-9 items-center justify-center rounded border px-3 text-sm transition-colors"
-          aria-label="Supprimer l'enveloppe"
-          title="Supprimer"
+          aria-label="Remove envelope"
+          title="Remove"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
         </button>
