@@ -16,6 +16,10 @@ export const NAV_LINKS: SocialLink[] = [
     href: '/tools',
     label: 'outils',
   },
+  {
+    href: '/about',
+    label: 'à propos',
+  },
 ]
 
 export const SOCIAL_LINKS: SocialLink[] = [
