@@ -8,23 +8,23 @@ import { Icon } from 'astro-icon/components'
 const tools = [
   {
     href: '/tools/budget',
-    title: 'Budget Tool',
+    title: 'Outil Budget',
     icon: 'lucide:wallet',
     description:
-      'Manage your monthly budget, calculate free allocation and distribute envelopes.',
+      'Gérez votre budget mensuel, calculez votre allocation libre et répartissez vos enveloppes.',
   },
 ]
 ---
 
 <Layout class="max-w-3xl">
-  <PageHead slot="head" title="Tools" />
-  <Breadcrumbs items={[{ label: 'Tools', icon: 'lucide:wrench' }]} />
+  <PageHead slot="head" title="Outils" />
+  <Breadcrumbs items={[{ label: 'Outils', icon: 'lucide:wrench' }]} />
 
   <div class="flex flex-col gap-4">
     <div class="flex flex-col gap-1">
-      <h1 class="text-2xl font-semibold">Tools</h1>
+      <h1 class="text-2xl font-semibold">Outils</h1>
       <p class="text-foreground/60 text-sm">
-        A selection of handy tools I use or build.
+        Une sélection d'outils pratiques que j'utilise ou que je construis.
       </p>
     </div>
 
@@ -40,7 +40,6 @@ const tools = [
                 <Icon name={tool.icon} class="size-4" />
                 <span>{tool.title}</span>
               </span>
-
               <p class="text-foreground/60 mt-1 text-sm">{tool.description}</p>
             </Link>
           </li>

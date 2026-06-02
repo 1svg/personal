@@ -188,7 +188,7 @@ const tocSections = await getTOCSections(currentPostId)
             subpostCount > 0 && (
               <div class="flex w-full items-center justify-center gap-1 py-2 sm:w-fit sm:px-2 sm:py-0 first:sm:pl-0 last:sm:pr-0">
                 <Icon name="lucide:file-text" class="size-3" />
-                {subpostCount} subpost{subpostCount === 1 ? '' : 's'}
+                {subpostCount} sous-article{subpostCount === 1 ? '' : 's'}
               </div>
             )
           }
@@ -250,8 +250,8 @@ const tocSections = await getTOCSections(currentPostId)
     size="icon"
     className="group fixed right-8 bottom-8 z-50 hidden"
     id="scroll-to-top"
-    title="Scroll to top"
-    aria-label="Scroll to top"
+    title="Retour en haut"
+    aria-label="Retour en haut"
   >
     <Icon
       name="lucide:arrow-up"

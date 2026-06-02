@@ -9,21 +9,21 @@ import { Icon } from 'astro-icon/components'
 <Layout class="max-w-3xl">
   <PageHead
     slot="head"
-    title="Budget Tool"
-    description="Calculate your monthly budget and distribute your free allocation."
+    title="Outil Budget"
+    description="Calculez votre budget mensuel et répartissez votre allocation libre."
   />
 
   <Breadcrumbs
     items={[
-      { label: 'Tools', href: '/tools', icon: 'lucide:wrench' },
-      { label: 'Budget Tool', icon: 'lucide:wallet' },
+      { label: 'Outils', href: '/tools', icon: 'lucide:wrench' },
+      { label: 'Outil Budget', icon: 'lucide:wallet' },
     ]}
   />
 
   <div class="flex flex-col gap-6">
     <Card>
       <CardHeader>
-        <CardTitle>Budget Tool</CardTitle>
+        <CardTitle>Outil Budget</CardTitle>
       </CardHeader>
 
       <CardContent>
@@ -34,7 +34,7 @@ import { Icon } from 'astro-icon/components'
                 for="income-input"
                 class="text-muted-foreground text-xs font-medium"
               >
-                Total Income
+                Revenus totaux
               </label>
               <input
                 id="income-input"
@@ -51,7 +51,7 @@ import { Icon } from 'astro-icon/components'
                 for="fixed-input"
                 class="text-muted-foreground text-xs font-medium"
               >
-                Fixed Expenses
+                Charges fixes
               </label>
               <input
                 id="fixed-input"
@@ -70,7 +70,7 @@ import { Icon } from 'astro-icon/components'
         >
           <div>
             <p class="text-muted-foreground text-xs font-medium">
-              Free Allocation
+              Allocation libre
             </p>
             <p id="free-output" class="mt-1 font-mono text-lg font-semibold">
               0,00 €
@@ -79,7 +79,7 @@ import { Icon } from 'astro-icon/components'
 
           <div>
             <p class="text-muted-foreground text-xs font-medium">
-              Remaining Unallocated
+              Reste non alloué
             </p>
             <p
               id="remaining-output"
@@ -97,7 +97,7 @@ import { Icon } from 'astro-icon/components'
         <div
           class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
         >
-          <CardTitle>Envelopes</CardTitle>
+          <CardTitle>Enveloppes</CardTitle>
 
           <div class="flex flex-wrap gap-2">
             <button
@@ -107,7 +107,7 @@ import { Icon } from 'astro-icon/components'
             >
               <span class="flex items-center gap-1.5">
                 <Icon name="lucide:plus" class="size-3.5" />
-                Add Envelope
+                Ajouter une enveloppe
               </span>
             </button>
 
@@ -118,7 +118,7 @@ import { Icon } from 'astro-icon/components'
             >
               <span class="flex items-center gap-1.5">
                 <Icon name="lucide:rotate-ccw" class="size-3.5" />
-                Reset
+                Réinitialiser
               </span>
             </button>
           </div>
@@ -131,7 +131,8 @@ import { Icon } from 'astro-icon/components'
             id="empty-envelopes"
             class="border-border text-muted-foreground rounded-md border border-dashed px-4 py-8 text-center text-sm"
           >
-            No envelopes added. Click “Add Envelope” to get started.
+            Aucune enveloppe ajoutée. Cliquez sur "Ajouter une enveloppe" pour
+            commencer.
           </div>
         </div>
       </CardContent>
@@ -254,11 +255,11 @@ import { Icon } from 'astro-icon/components'
 
       row.innerHTML = `
         <div class="space-y-2">
-          <label class="text-muted-foreground text-xs font-medium">Label</label>
+          <label class="text-muted-foreground text-xs font-medium">Libellé</label>
           <input
             type="text"
             data-envelope-label
-            placeholder="Cash / Revolut"
+            placeholder="Espèces / Revolut"
             class="border-border bg-background text-foreground h-9 w-full rounded border px-3 text-sm outline-none"
             value="${escapeHtml(label)}"
           />
@@ -278,7 +279,7 @@ import { Icon } from 'astro-icon/components'
         </div>
 
         <div class="space-y-2">
-          <p class="text-muted-foreground text-xs font-medium">Amount</p>
+          <p class="text-muted-foreground text-xs font-medium">Montant</p>
           <p data-envelope-amount class="font-mono text-sm font-semibold leading-9">0,00 €</p>
         </div>
 
@@ -286,8 +287,8 @@ import { Icon } from 'astro-icon/components'
           type="button"
           data-remove-envelope
           class="border-border bg-background hover:bg-muted inline-flex h-9 items-center justify-center rounded border px-3 text-sm transition-colors"
-          aria-label="Remove envelope"
-          title="Remove"
+          aria-label="Supprimer l'enveloppe"
+          title="Supprimer"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
         </button>
