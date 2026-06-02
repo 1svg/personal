@@ -6,7 +6,7 @@ import Layout from '@/layouts/layout.astro'
 import { Icon } from 'astro-icon/components'
 import { getEntry } from 'astro:content'
 
-const tool = await getEntry('tools', 'budget')
+const tool = await getEntry('tools', 'finance')
 if (!tool) throw new Error('Outil introuvable')
 const { name, description, icon } = tool.data
 ---
@@ -27,7 +27,6 @@ const { name, description, icon } = tool.data
         <CardTitle>{name}</CardTitle>
       </CardHeader>
 
-      <!-- reste du JSX inchangé -->
       <CardContent>
         <div class="bg-muted/20 space-y-4 rounded-md p-3">
           <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -68,11 +67,11 @@ const { name, description, icon } = tool.data
         </div>
 
         <div
-          class="border-border/50 mt-4 grid grid-cols-1 gap-4 border-t pt-4 md:grid-cols-2"
+          class="border-border/50 mt-4 grid grid-cols-1 gap-4 border-t pt-4 md:grid-cols-4"
         >
           <div>
             <p class="text-muted-foreground text-xs font-medium">
-              Allocation libre
+              Reste disponible
             </p>
             <p id="free-output" class="mt-1 font-mono text-lg font-semibold">
               0,00 €
@@ -80,17 +79,52 @@ const { name, description, icon } = tool.data
           </div>
 
           <div>
+            <p class="text-muted-foreground text-xs font-medium">% alloué</p>
+            <p
+              id="allocated-percent-output"
+              class="mt-1 font-mono text-lg font-semibold"
+            >
+              0 %
+            </p>
+          </div>
+
+          <div>
+            <p class="text-muted-foreground text-xs font-medium">% restant</p>
+            <p
+              id="remaining-percent-output"
+              class="mt-1 font-mono text-lg font-semibold"
+            >
+              100 %
+            </p>
+          </div>
+
+          <div>
             <p class="text-muted-foreground text-xs font-medium">
-              Reste non alloué
+              Montant restant
             </p>
             <p
-              id="remaining-output"
+              id="remaining-amount-output"
               class="mt-1 font-mono text-lg font-semibold"
             >
               0,00 €
             </p>
           </div>
         </div>
+
+        <div class="bg-muted mt-4 h-2 overflow-hidden rounded-full">
+          <div
+            id="allocation-progress"
+            class="bg-primary h-full w-0 transition-all duration-200"
+          >
+          </div>
+        </div>
+
+        <p
+          id="allocation-warning"
+          class="text-destructive mt-3 hidden text-sm font-medium"
+        >
+          Le total des enveloppes dépasse 100 % du reste disponible.
+        </p>
       </CardContent>
     </Card>
 
@@ -102,6 +136,17 @@ const { name, description, icon } = tool.data
           <CardTitle>Enveloppes</CardTitle>
 
           <div class="flex flex-wrap gap-2">
+            <button
+              id="preset-envelopes"
+              class="border-border bg-background hover:bg-muted rounded border px-3 py-1.5 text-sm transition-colors"
+              type="button"
+            >
+              <span class="flex items-center gap-1.5">
+                <Icon name="lucide:sparkles" class="size-3.5" />
+                Préremplir
+              </span>
+            </button>
+
             <button
               id="add-envelope"
               class="border-border bg-background hover:bg-muted rounded border px-3 py-1.5 text-sm transition-colors"
@@ -133,15 +178,13 @@ const { name, description, icon } = tool.data
             id="empty-envelopes"
             class="border-border text-muted-foreground rounded-md border border-dashed px-4 py-8 text-center text-sm"
           >
-            Aucune enveloppe ajoutée. Cliquez sur "Ajouter une enveloppe" pour
+            Aucune enveloppe ajoutée. Clique sur “Ajouter une enveloppe” pour
             commencer.
           </div>
         </div>
       </CardContent>
     </Card>
   </div>
-</Layout>
 
-<script>
-  // ... ton script inchangé
-</script>
+  <script src="./_finance.ts"></script>
+</Layout>
