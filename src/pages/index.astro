@@ -1,40 +1,71 @@
 ---
 import Link from '@/components/link.astro'
 import PageHead from '@/components/page-head.astro'
+import SocialIcons from '@/components/social-icons.astro'
+import AvatarComponent from '@/components/ui/avatar'
 import { buttonVariants } from '@/components/ui/button'
 import Layout from '@/layouts/layout.astro'
+import type { SocialLink } from '@/types'
+import { getEntry } from 'astro:content'
 
+const author = await getEntry('authors', '1svg')
+if (!author) throw new Error('Auteur introuvable')
+const { name, avatar, bio, pronouns } = author.data
+
+const socialLinks: SocialLink[] = [
+  author.data.website && { href: author.data.website, label: 'Website' },
+  author.data.github && { href: author.data.github, label: 'GitHub' },
+  author.data.twitter && { href: author.data.twitter, label: 'Twitter' },
+  author.data.linkedin && { href: author.data.linkedin, label: 'LinkedIn' },
+  author.data.mail && { href: `mailto:${author.data.mail}`, label: 'Email' },
+].filter(Boolean) as SocialLink[]
 ---
 
 <Layout class="max-w-3xl">
-  <PageHead slot="head" title="Home" />
+  <PageHead slot="head" title="Accueil" />
 
   <section class="rounded-lg border">
-    <div class="flex flex-col space-y-1.5 p-6">
-      <h3 class="text-3xl leading-none font-medium">1svg</h3>
-      <p class="text-muted-foreground text-sm">
-        /wʌn ɛs viː dʒiː/ &bull; <span class="font-medium">noun</span>
-      </p>
-    </div>
-    <div class="p-6 pt-0">
-      <p class="text-muted-foreground text-sm">
-        Personal space of <span class="text-foreground font-medium">1svg</span> —
-        a dev tag for a developer who builds tools, writes about code, and documents
-        the journey along the way.
-      </p>
+    <div class="flex flex-wrap gap-4 p-6">
+      <Link href={`/authors/${author.id}`} class="block">
+        <AvatarComponent
+          client:load
+          src={avatar}
+          alt={`Avatar de ${name}`}
+          fallback={name[0]}
+          className="hover:ring-primary size-32 rounded-md transition-shadow duration-300 hover:cursor-pointer hover:ring-2 *:data-[slot='avatar-fallback']:rounded-md *:data-[slot='avatar-image']:object-cover"
+        />
+      </Link>
+      <div class="flex grow flex-col justify-between gap-y-4">
+        <div>
+          <div class="flex flex-wrap items-center gap-x-2">
+            <h3 class="text-3xl leading-none font-medium">{name}</h3>
+            {
+              pronouns && (
+                <span class="text-muted-foreground text-sm">({pronouns})</span>
+              )
+            }
+          </div>
+          <p class="text-muted-foreground mt-1 text-sm">
+            /flɔ.ʁjɑ̃/ &bull; <span class="font-medium">user</span>
+          </p>
+          <p class="text-muted-foreground mt-3 text-sm">{bio}</p>
+        </div>
+        <SocialIcons links={socialLinks} />
+      </div>
     </div>
   </section>
+
   <section class="flex flex-col gap-y-4">
-    <h2 class="text-2xl font-medium">Latest tools</h2>
+    <h2 class="text-2xl font-medium">Derniers outils</h2>
     <ul class="flex flex-col gap-y-2">
       <li>
         <Link
           href="/tools/budget"
           class="hover:bg-accent/10 text-foreground/80 hover:text-foreground block rounded-lg border p-4 transition-colors"
         >
-          <span class="font-medium">Budget Tool</span>
+          <span class="font-medium">Outil Budget</span>
           <p class="text-foreground/60 mt-1 text-sm">
-            Manage your monthly budget and distribute envelopes.
+            Gérez votre budget mensuel et répartissez vos enveloppes.
           </p>
         </Link>
       </li>
@@ -44,11 +75,11 @@ import Layout from '@/layouts/layout.astro'
         href="/tools"
         class={buttonVariants({ variant: 'ghost' }) + ' group'}
       >
-        See all tools <span
+        Voir tous les outils <span
           class="ml-1.5 transition-transform group-hover:translate-x-1"
           >&rarr;</span
         >
       </Link>
     </div>
-  </section></Layout
->
+  </section>
+</Layout>
