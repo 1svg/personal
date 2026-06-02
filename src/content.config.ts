@@ -18,20 +18,6 @@ const user = defineCollection({
   }),
 })
 
-const projects = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/projects' }),
-  schema: ({ image }) =>
-    z.object({
-      name: z.string(),
-      description: z.string(),
-      tags: z.array(z.string()),
-      image: image(),
-      link: z.url(),
-      startDate: z.coerce.date().optional(),
-      endDate: z.coerce.date().optional(),
-    }),
-})
-
 const tools = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/tools' }),
   schema: z.object({
@@ -43,4 +29,4 @@ const tools = defineCollection({
   }),
 })
 
-export const collections = { user, projects, tools }
+export const collections = { user, tools }
