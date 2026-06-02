@@ -1,10 +1,10 @@
 ---
-import Link from '@/components/link.astro'
+import Link from '@/components/shared/link.astro'
+import SocialIcons from '@/components/shared/social-icons.astro'
 import AvatarComponent from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
 import type { SocialLink } from '@/types'
 import type { CollectionEntry } from 'astro:content'
-import SocialIcons from './social-icons.astro'
 
 interface Props {
   author: CollectionEntry<'user'>
