@@ -1,25 +1,14 @@
 ---
+import AuthorCard from '@/components/cards/author-card.astro'
+import WorkshopCard from '@/components/cards/workshop-card.astro'
 import Link from '@/components/shared/link.astro'
 import PageHead from '@/components/shared/page-head.astro'
-import SocialIcons from '@/components/shared/social-icons.astro'
-import WorkshopCard from '@/components/cards/workshop-card.astro'
-import AvatarComponent from '@/components/ui/avatar'
 import { buttonVariants } from '@/components/ui/button'
 import Layout from '@/layouts/layout.astro'
-import type { SocialLink } from '@/types'
 import { getCollection, getEntry } from 'astro:content'
 
 const author = await getEntry('user', '1svg')
 if (!author) throw new Error('Auteur introuvable')
-const { name, avatar, bio, pronouns } = author.data
-
-const socialLinks: SocialLink[] = [
-  author.data.website && { href: author.data.website, label: 'Website' },
-  author.data.github && { href: author.data.github, label: 'GitHub' },
-  author.data.twitter && { href: author.data.twitter, label: 'Twitter' },
-  author.data.linkedin && { href: author.data.linkedin, label: 'LinkedIn' },
-  author.data.mail && { href: `mailto:${author.data.mail}`, label: 'Email' },
-].filter(Boolean) as SocialLink[]
 
 const tools = await getCollection('workshop', ({ data }) => !data.draft)
 tools.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
@@ -29,36 +18,7 @@ const recentTools = tools.slice(0, 3)
 <Layout class="max-w-3xl">
   <PageHead slot="head" title="Accueil" />
 
-  <section class="rounded-lg border">
-    <div class="flex flex-wrap gap-4 p-6">
-      <Link href="/about" class="block">
-        <AvatarComponent
-          client:load
-          src={avatar}
-          alt={`Avatar de ${name}`}
-          fallback={name[0]}
-          className="hover:ring-primary size-32 rounded-md transition-shadow duration-300 hover:cursor-pointer hover:ring-2 *:data-[slot='avatar-fallback']:rounded-md *:data-[slot='avatar-image']:object-cover"
-        />
-      </Link>
-      <div class="flex grow flex-col justify-between gap-y-4">
-        <div>
-          <div class="flex flex-wrap items-center gap-x-2">
-            <h3 class="text-3xl leading-none font-medium">{name}</h3>
-            {
-              pronouns && (
-                <span class="text-muted-foreground text-sm">({pronouns})</span>
-              )
-            }
-          </div>
-          <p class="text-muted-foreground mt-1 text-sm">
-            /flɔ.ʁjɑ̃/ &bull; <span class="font-medium">user</span>
-          </p>
-          <p class="text-muted-foreground mt-3 text-sm">{bio}</p>
-        </div>
-        <SocialIcons links={socialLinks} />
-      </div>
-    </div>
-  </section>
+  <AuthorCard author={author} />
 
   <section class="flex flex-col gap-y-4">
     <h2 class="text-2xl font-medium">Workshop</h2>

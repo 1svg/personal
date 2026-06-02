@@ -15,6 +15,7 @@ const user = defineCollection({
     github: z.url().optional(),
     linkedin: z.url().optional(),
     discord: z.url().optional(),
+    letterboxd: z.url().optional(),
   }),
 })
 
