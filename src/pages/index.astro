@@ -1,23 +1,54 @@
 ---
-import AuthorCard from '@/components/author-card.astro'
+import Link from '@/components/link.astro'
 import PageHead from '@/components/page-head.astro'
+import { buttonVariants } from '@/components/ui/button'
 import Layout from '@/layouts/layout.astro'
-import { getAllAuthors } from '@/lib/data-utils'
 
-const authors = await getAllAuthors()
-const author = authors[0]
 ---
 
 <Layout class="max-w-3xl">
   <PageHead slot="head" title="Home" />
 
-  <div class="flex flex-col gap-3">
-    <section class="rounded-lg border p-6">
+  <section class="rounded-lg border">
+    <div class="flex flex-col space-y-1.5 p-6">
       <h3 class="text-3xl leading-none font-medium">1svg</h3>
       <p class="text-muted-foreground text-sm">
         /wʌn ɛs viː dʒiː/ &bull; <span class="font-medium">noun</span>
       </p>
-    </section>
-    {author && <AuthorCard author={author} />}
-  </div>
-</Layout>
+    </div>
+    <div class="p-6 pt-0">
+      <p class="text-muted-foreground text-sm">
+        Personal space of <span class="text-foreground font-medium">1svg</span> —
+        a dev tag for a developer who builds tools, writes about code, and documents
+        the journey along the way.
+      </p>
+    </div>
+  </section>
+  <section class="flex flex-col gap-y-4">
+    <h2 class="text-2xl font-medium">Latest tools</h2>
+    <ul class="flex flex-col gap-y-2">
+      <li>
+        <Link
+          href="/tools/budget"
+          class="hover:bg-accent/10 text-foreground/80 hover:text-foreground block rounded-lg border p-4 transition-colors"
+        >
+          <span class="font-medium">Budget Tool</span>
+          <p class="text-foreground/60 mt-1 text-sm">
+            Manage your monthly budget and distribute envelopes.
+          </p>
+        </Link>
+      </li>
+    </ul>
+    <div class="flex justify-center">
+      <Link
+        href="/tools"
+        class={buttonVariants({ variant: 'ghost' }) + ' group'}
+      >
+        See all tools <span
+          class="ml-1.5 transition-transform group-hover:translate-x-1"
+          >&rarr;</span
+        >
+      </Link>
+    </div>
+  </section></Layout
+>
