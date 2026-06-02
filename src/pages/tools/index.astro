@@ -1,50 +1,28 @@
 ﻿---
 import Breadcrumbs from '@/components/breadcrumbs.astro'
-import Link from '@/components/link.astro'
 import PageHead from '@/components/page-head.astro'
+import ToolCard from '@/components/tool-card.astro'
 import Layout from '@/layouts/layout.astro'
-import { Icon } from 'astro-icon/components'
+import { getCollection } from 'astro:content'
 
-const tools = [
-  {
-    href: '/tools/budget',
-    title: 'Outil Budget',
-    icon: 'lucide:wallet',
-    description:
-      'Gérez votre budget mensuel, calculez votre allocation libre et répartissez vos enveloppes.',
-  },
-]
+const tools = await getCollection('tools', ({ data }) => !data.draft)
+tools.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
 ---
 
 <Layout class="max-w-3xl">
   <PageHead slot="head" title="Outils" />
   <Breadcrumbs items={[{ label: 'Outils', icon: 'lucide:wrench' }]} />
-
-  <div class="flex flex-col gap-4">
-    <div class="flex flex-col gap-1">
-      <h1 class="text-2xl font-semibold">Outils</h1>
-      <p class="text-foreground/60 text-sm">
-        Une sélection d'outils pratiques que j'utilise ou que je construis.
-      </p>
-    </div>
-
-    <ul class="flex flex-col gap-2">
-      {
-        tools.map((tool) => (
+  {
+    tools.length > 0 ? (
+      <ul class="flex flex-col gap-4">
+        {tools.map((tool) => (
           <li>
-            <Link
-              href={tool.href}
-              class="hover:bg-accent/10 text-foreground/80 hover:text-foreground block rounded-lg p-4 transition-colors"
-            >
-              <span class="inline-flex items-center gap-2 font-medium">
-                <Icon name={tool.icon} class="size-4" />
-                <span>{tool.title}</span>
-              </span>
-              <p class="text-foreground/60 mt-1 text-sm">{tool.description}</p>
-            </Link>
+            <ToolCard tool={tool} />
           </li>
-        ))
-      }
-    </ul>
-  </div>
+        ))}
+      </ul>
+    ) : (
+      <p class="text-muted-foreground text-center">Aucun outil trouvé.</p>
+    )
+  }
 </Layout>

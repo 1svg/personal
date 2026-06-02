@@ -2,11 +2,13 @@
 import Link from '@/components/link.astro'
 import PageHead from '@/components/page-head.astro'
 import SocialIcons from '@/components/social-icons.astro'
+import ToolCard from '@/components/tool-card.astro'
 import AvatarComponent from '@/components/ui/avatar'
 import { buttonVariants } from '@/components/ui/button'
+import { SITE } from '@/consts'
 import Layout from '@/layouts/layout.astro'
 import type { SocialLink } from '@/types'
-import { getEntry } from 'astro:content'
+import { getCollection, getEntry } from 'astro:content'
 
 const author = await getEntry('authors', '1svg')
 if (!author) throw new Error('Auteur introuvable')
@@ -19,6 +21,10 @@ const socialLinks: SocialLink[] = [
   author.data.linkedin && { href: author.data.linkedin, label: 'LinkedIn' },
   author.data.mail && { href: `mailto:${author.data.mail}`, label: 'Email' },
 ].filter(Boolean) as SocialLink[]
+
+const tools = await getCollection('tools', ({ data }) => !data.draft)
+tools.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+const recentTools = tools.slice(0, SITE.featuredPostCount)
 ---
 
 <Layout class="max-w-3xl">
@@ -57,18 +63,14 @@ const socialLinks: SocialLink[] = [
 
   <section class="flex flex-col gap-y-4">
     <h2 class="text-2xl font-medium">Derniers outils</h2>
-    <ul class="flex flex-col gap-y-2">
-      <li>
-        <Link
-          href="/tools/budget"
-          class="hover:bg-accent/10 text-foreground/80 hover:text-foreground block rounded-lg border p-4 transition-colors"
-        >
-          <span class="font-medium">Outil Budget</span>
-          <p class="text-foreground/60 mt-1 text-sm">
-            Gérez votre budget mensuel et répartissez vos enveloppes.
-          </p>
-        </Link>
-      </li>
+    <ul class="flex flex-col gap-4">
+      {
+        recentTools.map((tool) => (
+          <li>
+            <ToolCard tool={tool} />
+          </li>
+        ))
+      }
     </ul>
     <div class="flex justify-center">
       <Link

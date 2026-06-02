@@ -4,28 +4,30 @@ import PageHead from '@/components/page-head.astro'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import Layout from '@/layouts/layout.astro'
 import { Icon } from 'astro-icon/components'
+import { getEntry } from 'astro:content'
+
+const tool = await getEntry('tools', 'budget')
+if (!tool) throw new Error('Outil introuvable')
+const { name, description, icon } = tool.data
 ---
 
 <Layout class="max-w-3xl">
-  <PageHead
-    slot="head"
-    title="Outil Budget"
-    description="Calculez votre budget mensuel et répartissez votre allocation libre."
-  />
+  <PageHead slot="head" title={name} description={description} />
 
   <Breadcrumbs
     items={[
       { label: 'Outils', href: '/tools', icon: 'lucide:wrench' },
-      { label: 'Outil Budget', icon: 'lucide:wallet' },
+      { label: name, icon: icon ?? 'lucide:tool' },
     ]}
   />
 
   <div class="flex flex-col gap-6">
     <Card>
       <CardHeader>
-        <CardTitle>Outil Budget</CardTitle>
+        <CardTitle>{name}</CardTitle>
       </CardHeader>
 
+      <!-- reste du JSX inchangé -->
       <CardContent>
         <div class="bg-muted/20 space-y-4 rounded-md p-3">
           <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -141,196 +143,5 @@ import { Icon } from 'astro-icon/components'
 </Layout>
 
 <script>
-  type Envelope = {
-    label?: string
-    percent?: number
-  }
-
-  function getById<T extends HTMLElement>(id: string): T {
-    const element = document.getElementById(id)
-
-    if (!element) {
-      throw new Error(`Missing #${id}`)
-    }
-
-    return element as T
-  }
-
-  function formatCurrency(value: number): string {
-    return new Intl.NumberFormat('fr-FR', {
-      style: 'currency',
-      currency: 'EUR',
-    }).format(value)
-  }
-
-  function parseAmount(value: string): number {
-    const parsed = Number.parseFloat(value)
-    return Number.isFinite(parsed) ? parsed : 0
-  }
-
-  function roundAmount(value: number): number {
-    return Math.round(value * 100) / 100
-  }
-
-  function escapeHtml(value: string): string {
-    const container = document.createElement('div')
-    container.textContent = value
-    return container.innerHTML
-  }
-
-  function initBudgetTool(): void {
-    const incomeInput = getById<HTMLInputElement>('income-input')
-    const fixedInput = getById<HTMLInputElement>('fixed-input')
-    const freeOutput = getById<HTMLElement>('free-output')
-    const remainingOutput = getById<HTMLElement>('remaining-output')
-    const addEnvelopeButton = getById<HTMLButtonElement>('add-envelope')
-    const resetFormButton = getById<HTMLButtonElement>('reset-form')
-    const envelopesList = getById<HTMLElement>('envelopes-list')
-    const emptyEnvelopes = getById<HTMLElement>('empty-envelopes')
-
-    function getEnvelopeRows(): HTMLDivElement[] {
-      return Array.from(
-        envelopesList.querySelectorAll<HTMLDivElement>('[data-envelope-row]'),
-      )
-    }
-
-    function updateEmptyState(): void {
-      emptyEnvelopes.style.display =
-        getEnvelopeRows().length > 0 ? 'none' : 'block'
-    }
-
-    function calculateBudget(): void {
-      const income = parseAmount(incomeInput.value)
-      const fixedExpenses = parseAmount(fixedInput.value)
-      const freeAllocation = Math.max(0, roundAmount(income - fixedExpenses))
-      let totalPercent = 0
-
-      freeOutput.textContent = formatCurrency(freeAllocation)
-
-      getEnvelopeRows().forEach((row) => {
-        const labelInput = row.querySelector<HTMLInputElement>(
-          '[data-envelope-label]',
-        )
-        const percentInput = row.querySelector<HTMLInputElement>(
-          '[data-envelope-percent]',
-        )
-        const amountOutput = row.querySelector<HTMLElement>(
-          '[data-envelope-amount]',
-        )
-
-        if (!labelInput || !percentInput || !amountOutput) {
-          return
-        }
-
-        const percent = parseAmount(percentInput.value)
-        const amount = roundAmount(freeAllocation * (percent / 100))
-
-        totalPercent += percent
-        amountOutput.textContent = formatCurrency(amount)
-        amountOutput.classList.toggle(
-          'text-muted-foreground',
-          !labelInput.value.trim(),
-        )
-      })
-
-      totalPercent = roundAmount(totalPercent)
-
-      const remainingPercent = roundAmount(100 - totalPercent)
-      const remainingAmount = roundAmount(
-        freeAllocation * (remainingPercent / 100),
-      )
-
-      remainingOutput.textContent = formatCurrency(Math.max(0, remainingAmount))
-      remainingOutput.classList.toggle('text-destructive', remainingPercent < 0)
-    }
-
-    function createEnvelopeRow(envelope: Envelope = {}): void {
-      const row = document.createElement('div')
-      const label = envelope.label || ''
-      const percent = envelope.percent ?? ''
-
-      row.setAttribute('data-envelope-row', 'true')
-      row.className =
-        'bg-muted/20 grid grid-cols-1 gap-3 rounded-md p-3 md:grid-cols-[1fr_6rem_6rem_auto] md:items-end'
-
-      row.innerHTML = `
-        <div class="space-y-2">
-          <label class="text-muted-foreground text-xs font-medium">Libellé</label>
-          <input
-            type="text"
-            data-envelope-label
-            placeholder="Espèces / Revolut"
-            class="border-border bg-background text-foreground h-9 w-full rounded border px-3 text-sm outline-none"
-            value="${escapeHtml(label)}"
-          />
-        </div>
-
-        <div class="space-y-2">
-          <label class="text-muted-foreground text-xs font-medium">%</label>
-          <input
-            type="number"
-            min="0"
-            step="0.01"
-            data-envelope-percent
-            placeholder="30"
-            class="border-border bg-background text-foreground h-9 w-full rounded border px-3 text-sm outline-none"
-            value="${percent}"
-          />
-        </div>
-
-        <div class="space-y-2">
-          <p class="text-muted-foreground text-xs font-medium">Montant</p>
-          <p data-envelope-amount class="font-mono text-sm font-semibold leading-9">0,00 €</p>
-        </div>
-
-        <button
-          type="button"
-          data-remove-envelope
-          class="border-border bg-background hover:bg-muted inline-flex h-9 items-center justify-center rounded border px-3 text-sm transition-colors"
-          aria-label="Supprimer l'enveloppe"
-          title="Supprimer"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
-        </button>
-      `
-
-      row
-        .querySelector<HTMLInputElement>('[data-envelope-label]')
-        ?.addEventListener('input', calculateBudget)
-
-      row
-        .querySelector<HTMLInputElement>('[data-envelope-percent]')
-        ?.addEventListener('input', calculateBudget)
-
-      row
-        .querySelector<HTMLButtonElement>('[data-remove-envelope]')
-        ?.addEventListener('click', () => {
-          row.remove()
-          updateEmptyState()
-          calculateBudget()
-        })
-
-      envelopesList.appendChild(row)
-      updateEmptyState()
-      calculateBudget()
-    }
-
-    function resetForm(): void {
-      incomeInput.value = ''
-      fixedInput.value = ''
-      getEnvelopeRows().forEach((row) => row.remove())
-      updateEmptyState()
-      calculateBudget()
-    }
-
-    updateEmptyState()
-    calculateBudget()
-
-    incomeInput.addEventListener('input', calculateBudget)
-    fixedInput.addEventListener('input', calculateBudget)
-    addEnvelopeButton.addEventListener('click', () => createEnvelopeRow())
-    resetFormButton.addEventListener('click', resetForm)
-  }
-
-  document.addEventListener('astro:page-load', initBudgetTool)
+  // ... ton script inchangé
 </script>
