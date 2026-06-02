@@ -10,7 +10,7 @@ interface Props {
   author: CollectionEntry<'user'>
 }
 const { author } = Astro.props
-const { name, avatar, bio, pronouns } = author.data
+const { name, avatar, bio, pronouns, tagline } = author.data
 const currentPath = Astro.url.pathname
 const isAuthorPage = currentPath === `/about`
 
@@ -57,7 +57,11 @@ const socialLinks: SocialLink[] = [
             )
           }
         </div>
-        <p class="text-muted-foreground text-sm">/flɔ.ʁjɑ̃/ • user</p>
+        {
+          tagline && (
+            <p class="text-muted-foreground text-sm">{tagline}</p>
+          )
+        }
         <p class="text-muted-foreground mt-1.5 text-sm">{bio}</p>
       </div>
       <SocialIcons links={socialLinks} />
