@@ -1,14 +1,12 @@
-import type { IconMap, SocialLink, Site } from '@/types'
+import type { IconMap, SocialLink } from '@/types'
 
-export const SITE: Site = {
+export const SITE = {
   title: '1svg',
   description:
     '1svg est un template de blog minimaliste et sans style prédéfini — construit avec Astro, Tailwind et shadcn/ui.',
   href: 'https://1svg.vercel.app',
   author: '1svg',
   locale: 'fr-FR',
-  featuredPostCount: 2,
-  postsPerPage: 3,
 }
 
 export const NAV_LINKS: SocialLink[] = [
@@ -26,10 +24,6 @@ export const SOCIAL_LINKS: SocialLink[] = [
   {
     href: 'https://github.com/1svg',
     label: 'GitHub',
-  },
-  {
-    href: '/rss.xml',
-    label: 'RSS',
   },
 ]
 

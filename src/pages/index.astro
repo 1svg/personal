@@ -5,7 +5,6 @@ import SocialIcons from '@/components/social-icons.astro'
 import ToolCard from '@/components/tool-card.astro'
 import AvatarComponent from '@/components/ui/avatar'
 import { buttonVariants } from '@/components/ui/button'
-import { SITE } from '@/consts'
 import Layout from '@/layouts/layout.astro'
 import type { SocialLink } from '@/types'
 import { getCollection, getEntry } from 'astro:content'
@@ -24,7 +23,7 @@ const socialLinks: SocialLink[] = [
 
 const tools = await getCollection('tools', ({ data }) => !data.draft)
 tools.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-const recentTools = tools.slice(0, SITE.featuredPostCount)
+const recentTools = tools.slice(0, 3)
 ---
 
 <Layout class="max-w-3xl">
