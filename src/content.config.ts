@@ -18,8 +18,8 @@ const user = defineCollection({
   }),
 })
 
-const tools = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/tools' }),
+const workshop = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/workshop' }),
   schema: z.object({
     name: z.string(),
     description: z.string(),
@@ -29,4 +29,4 @@ const tools = defineCollection({
   }),
 })
 
-export const collections = { user, tools }
+export const collections = { user, workshop }

@@ -5,8 +5,8 @@ import Layout from '@/layouts/layout.astro'
 import { getEntry } from 'astro:content'
 import Finance from '../../../components/tools/finance'
 
-const tool = await getEntry('tools', 'finance')
-if (!tool) throw new Error('Outil introuvable')
+const tool = await getEntry('workshop', 'finance')
+if (!tool) throw new Error('Workshop introuvable')
 const { name, description, icon } = tool.data
 ---
 
@@ -15,7 +15,7 @@ const { name, description, icon } = tool.data
 
   <Breadcrumbs
     items={[
-      { label: 'Outils', href: '/tools', icon: 'lucide:wrench' },
+      { label: 'Workshop', href: '/workshop', icon: 'lucide:calendar' },
       { label: name, icon: icon ?? 'lucide:tool' },
     ]}
   />

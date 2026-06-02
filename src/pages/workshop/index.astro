@@ -1,28 +1,28 @@
 ﻿---
 import Breadcrumbs from '@/components/shared/breadcrumbs.astro'
 import PageHead from '@/components/shared/page-head.astro'
-import ToolCard from '@/components/cards/tool-card.astro'
+import WorkshopCard from '@/components/cards/workshop-card.astro'
 import Layout from '@/layouts/layout.astro'
 import { getCollection } from 'astro:content'
 
-const tools = await getCollection('tools', ({ data }) => !data.draft)
+const tools = await getCollection('workshop', ({ data }) => !data.draft)
 tools.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
 ---
 
 <Layout class="max-w-3xl">
-  <PageHead slot="head" title="Outils" />
-  <Breadcrumbs items={[{ label: 'Outils', icon: 'lucide:wrench' }]} />
+  <PageHead slot="head" title="Workshop" />
+  <Breadcrumbs items={[{ label: 'Workshop', icon: 'lucide:calendar' }]} />
   {
     tools.length > 0 ? (
       <ul class="flex flex-col gap-4">
         {tools.map((tool) => (
           <li>
-            <ToolCard tool={tool} />
+            <WorkshopCard tool={tool} />
           </li>
         ))}
       </ul>
     ) : (
-      <p class="text-muted-foreground text-center">Aucun outil trouvé.</p>
+      <p class="text-muted-foreground text-center">Aucun workshop trouvé.</p>
     )
   }
 </Layout>

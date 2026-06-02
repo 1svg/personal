@@ -2,7 +2,7 @@
 import Link from '@/components/shared/link.astro'
 import PageHead from '@/components/shared/page-head.astro'
 import SocialIcons from '@/components/shared/social-icons.astro'
-import ToolCard from '@/components/cards/tool-card.astro'
+import WorkshopCard from '@/components/cards/workshop-card.astro'
 import AvatarComponent from '@/components/ui/avatar'
 import { buttonVariants } from '@/components/ui/button'
 import Layout from '@/layouts/layout.astro'
@@ -21,7 +21,7 @@ const socialLinks: SocialLink[] = [
   author.data.mail && { href: `mailto:${author.data.mail}`, label: 'Email' },
 ].filter(Boolean) as SocialLink[]
 
-const tools = await getCollection('tools', ({ data }) => !data.draft)
+const tools = await getCollection('workshop', ({ data }) => !data.draft)
 tools.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
 const recentTools = tools.slice(0, 3)
 ---
@@ -61,22 +61,22 @@ const recentTools = tools.slice(0, 3)
   </section>
 
   <section class="flex flex-col gap-y-4">
-    <h2 class="text-2xl font-medium">Derniers outils</h2>
+    <h2 class="text-2xl font-medium">Workshop</h2>
     <ul class="flex flex-col gap-4">
       {
         recentTools.map((tool) => (
           <li>
-            <ToolCard tool={tool} />
+            <WorkshopCard tool={tool} />
           </li>
         ))
       }
     </ul>
     <div class="flex justify-center">
       <Link
-        href="/tools"
+        href="/workshop"
         class={buttonVariants({ variant: 'ghost' }) + ' group'}
       >
-        Voir tous les outils <span
+        Voir le workshop <span
           class="ml-1.5 transition-transform group-hover:translate-x-1"
           >&rarr;</span
         >
