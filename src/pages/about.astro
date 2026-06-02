@@ -1,16 +1,16 @@
 ---
+import AuthorCard from '@/components/author-card.astro'
 import Breadcrumbs from '@/components/breadcrumbs.astro'
 import PageHead from '@/components/page-head.astro'
 import Layout from '@/layouts/layout.astro'
+import { getEntry } from 'astro:content'
+
+const user = await getEntry('user', '1svg')
+if (!user) throw new Error('User not found')
 ---
 
 <Layout class="max-w-3xl">
   <PageHead slot="head" title="À propos" />
   <Breadcrumbs items={[{ label: 'À propos', icon: 'lucide:info' }]} />
-
-  <section>
-    <div class="prose">
-      <p class="text-foreground/60 mt-0">Page en cours de construction.</p>
-    </div>
-  </section>
+  <AuthorCard author={user} />
 </Layout>

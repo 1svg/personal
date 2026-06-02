@@ -1,8 +1,8 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content'
 import { readingTime, calculateWordCountFromHtml } from '@/lib/utils'
 
-export async function getAllAuthors(): Promise<CollectionEntry<'authors'>[]> {
-  return await getCollection('authors')
+export async function getAllAuthors(): Promise<CollectionEntry<'user'>[]> {
+  return await getCollection('user')
 }
 
 export async function getAllPosts(): Promise<CollectionEntry<'blog'>[]> {

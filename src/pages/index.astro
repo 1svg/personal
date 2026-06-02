@@ -10,7 +10,7 @@ import Layout from '@/layouts/layout.astro'
 import type { SocialLink } from '@/types'
 import { getCollection, getEntry } from 'astro:content'
 
-const author = await getEntry('authors', '1svg')
+const author = await getEntry('user', '1svg')
 if (!author) throw new Error('Auteur introuvable')
 const { name, avatar, bio, pronouns } = author.data
 
@@ -32,7 +32,7 @@ const recentTools = tools.slice(0, SITE.featuredPostCount)
 
   <section class="rounded-lg border">
     <div class="flex flex-wrap gap-4 p-6">
-      <Link href={`/authors/${author.id}`} class="block">
+      <Link href="/about" class="block">
         <AvatarComponent
           client:load
           src={avatar}

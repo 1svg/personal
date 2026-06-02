@@ -17,8 +17,8 @@ const blog = defineCollection({
     }),
 })
 
-const authors = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/authors' }),
+const user = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/user' }),
   schema: z.object({
     name: z.string(),
     pronouns: z.string().optional(),
@@ -58,4 +58,4 @@ const tools = defineCollection({
   }),
 })
 
-export const collections = { blog, authors, projects, tools }
+export const collections = { blog, user, projects, tools }
