@@ -9,21 +9,30 @@ import type { CollectionEntry } from 'astro:content'
 interface Props {
   author: CollectionEntry<'user'>
 }
+
 const { author } = Astro.props
-const { name, avatar, bio, pronouns, tagline } = author.data
-const currentPath = Astro.url.pathname
-const isAuthorPage = currentPath === `/about`
+const {
+  name,
+  avatar,
+  bio,
+  pronouns,
+  tagline,
+  website,
+  github,
+  twitter,
+  linkedin,
+  mail,
+  letterboxd,
+} = author.data
+const isAuthorPage = Astro.url.pathname === '/about'
 
 const socialLinks: SocialLink[] = [
-  author.data.website && { href: author.data.website, label: 'Website' },
-  author.data.github && { href: author.data.github, label: 'GitHub' },
-  author.data.twitter && { href: author.data.twitter, label: 'Twitter' },
-  author.data.linkedin && { href: author.data.linkedin, label: 'LinkedIn' },
-  author.data.mail && { href: `mailto:${author.data.mail}`, label: 'Email' },
-  author.data.letterboxd && {
-    href: author.data.letterboxd,
-    label: 'Letterboxd',
-  },
+  website && { href: website, label: 'Website' },
+  github && { href: github, label: 'GitHub' },
+  twitter && { href: twitter, label: 'Twitter' },
+  linkedin && { href: linkedin, label: 'LinkedIn' },
+  mail && { href: `mailto:${mail}`, label: 'Email' },
+  letterboxd && { href: letterboxd, label: 'Letterboxd' },
 ].filter(Boolean) as SocialLink[]
 ---
 
@@ -57,11 +66,7 @@ const socialLinks: SocialLink[] = [
             )
           }
         </div>
-        {
-          tagline && (
-            <p class="text-muted-foreground text-sm">{tagline}</p>
-          )
-        }
+        {tagline && <p class="text-muted-foreground text-sm">{tagline}</p>}
         <p class="text-muted-foreground mt-1.5 text-sm">{bio}</p>
       </div>
       <SocialIcons links={socialLinks} />

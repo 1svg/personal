@@ -1,12 +1,13 @@
 ﻿---
+import WorkshopCard from '@/components/cards/workshop-card.astro'
 import Breadcrumbs from '@/components/shared/breadcrumbs.astro'
 import PageHead from '@/components/shared/page-head.astro'
-import WorkshopCard from '@/components/cards/workshop-card.astro'
 import Layout from '@/layouts/layout.astro'
 import { getCollection } from 'astro:content'
 
-const tools = await getCollection('workshop', ({ data }) => !data.draft)
-tools.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+const tools = (await getCollection('workshop', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+)
 ---
 
 <Layout class="max-w-3xl">
@@ -22,7 +23,7 @@ tools.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
         ))}
       </ul>
     ) : (
-      <p class="text-muted-foreground text-center">Aucun workshop trouvé.</p>
+      <p class="text-muted-foreground text-center">No workshops found.</p>
     )
   }
 </Layout>

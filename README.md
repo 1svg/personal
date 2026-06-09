@@ -1,3 +1,3 @@
 # 1svg · personal
 
-Site personnel construit avec Astro.
+Personal site built with Astro.

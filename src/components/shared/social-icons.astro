@@ -10,6 +10,7 @@ interface Props {
 }
 
 const { links } = Astro.props
+const DEFAULT_ICON = 'lucide:message-circle-question'
 ---
 
 <ul class="flex flex-wrap gap-2" role="list">
@@ -24,10 +25,7 @@ const { links } = Astro.props
           external
         >
           <Icon
-            name={
-              ICON_MAP[label as keyof typeof ICON_MAP] ||
-              'lucide:message-circle-question'
-            }
+            name={ICON_MAP[label as keyof typeof ICON_MAP] ?? DEFAULT_ICON}
             class="size-4"
           />
         </Link>

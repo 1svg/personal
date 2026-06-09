@@ -16,8 +16,8 @@ type Envelope = { id: number; name: string; percent: number }
 
 const PRESETS = [
   { name: 'Cash', emoji: '💵', suggested: 50 },
-  { name: 'Livret', emoji: '🏦', suggested: 50 },
-  { name: 'PEA', emoji: '📈', suggested: 50 },
+  { name: 'Savings', emoji: '🏦', suggested: 50 },
+  { name: 'Stocks', emoji: '📈', suggested: 50 },
 ]
 
 const PALETTE = [
@@ -30,9 +30,9 @@ const PALETTE = [
 ]
 
 function fmt(v: number) {
-  return v.toLocaleString('fr-FR', {
+  return v.toLocaleString('en-US', {
     style: 'currency',
-    currency: 'EUR',
+    currency: 'USD',
     maximumFractionDigits: 0,
   })
 }
@@ -57,12 +57,9 @@ function Donut({
       offset += dash
       return s
     })
-  const remaining = Math.max(
-    0,
-    100 - envelopes.reduce((s, e) => s + e.percent, 0),
-  )
-  const rdash = (remaining / 100) * c
   const total = envelopes.reduce((s, e) => s + e.percent, 0)
+  const remaining = Math.max(0, 100 - total)
+  const rdash = (remaining / 100) * c
 
   return (
     <svg
@@ -111,7 +108,7 @@ function Donut({
           strokeLinecap="round"
         />
       ))}
-      {/* Texte — contre-rotaté pour rester à l'endroit */}
+      {/* Label */}
       <text
         x="44"
         y="41"
@@ -140,13 +137,13 @@ function Donut({
           fontWeight: 400,
         }}
       >
-        alloué
+        allocated
       </text>
     </svg>
   )
 }
 
-// ─── Ligne enveloppe ──────────────────────────────────────────────────────────
+// ─── Envelope row ─────────────────────────────────────────────────────────────
 
 function EnvelopeRow({
   env,
@@ -168,19 +165,16 @@ function EnvelopeRow({
         className="h-1.5 w-1.5 shrink-0 rounded-full"
         style={{ backgroundColor: PALETTE[index % PALETTE.length] }}
       />
-
       <Input
         type="text"
-        placeholder="Nom…"
+        placeholder="Name…"
         value={env.name}
         onChange={(e) => onUpdate(env.id, 'name', e.target.value)}
         className="placeholder:text-muted-foreground/40 h-8 border-0 bg-transparent p-0 text-sm font-medium shadow-none focus-visible:ring-0"
       />
-
       <span className="text-muted-foreground font-mono text-sm tabular-nums">
         {fmt(amount)}
       </span>
-
       <div className="relative">
         <Input
           type="number"
@@ -196,12 +190,11 @@ function EnvelopeRow({
           %
         </span>
       </div>
-
       <Button
         variant="ghost"
         size="icon"
         type="button"
-        aria-label="Supprimer"
+        aria-label="Delete"
         onClick={() => onDelete(env.id)}
         className="hover:text-destructive h-7 w-7 shrink-0 opacity-0 transition-opacity group-hover:opacity-100"
       >
@@ -220,7 +213,7 @@ function EnvelopeRow({
   )
 }
 
-// ─── Composant principal ──────────────────────────────────────────────────────
+// ─── Main component ───────────────────────────────────────────────────────────
 
 export default function FinanceTool() {
   const [income, setIncome] = useState('')
@@ -267,11 +260,11 @@ export default function FinanceTool() {
 
   return (
     <div className="flex flex-col gap-4">
-      {/* ── Revenus ── */}
+      {/* ── Income ── */}
       <div className="overflow-hidden rounded-xl border">
         <div className="px-4 py-3">
           <p className="text-muted-foreground text-xs font-medium tracking-widest uppercase">
-            Revenus
+            Income
           </p>
         </div>
         <Separator />
@@ -279,14 +272,14 @@ export default function FinanceTool() {
           {[
             {
               id: 'income',
-              label: 'Revenus totaux',
+              label: 'Total income',
               val: income,
               set: setIncome,
               placeholder: '2 500',
             },
             {
               id: 'fixed',
-              label: 'Charges fixes',
+              label: 'Fixed expenses',
               val: fixed,
               set: setFixed,
               placeholder: '1 200',
@@ -304,7 +297,7 @@ export default function FinanceTool() {
               </Label>
               <div className="relative w-32">
                 <span className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-sm">
-                  €
+                  $
                 </span>
                 <Input
                   id={id}
@@ -322,40 +315,37 @@ export default function FinanceTool() {
         </div>
       </div>
 
-      {/* ── Répartition ── */}
+      {/* ── Allocation ── */}
       <div className="overflow-hidden rounded-xl border">
         <div className="flex items-center justify-between px-4 py-3">
           <p className="text-muted-foreground text-xs font-medium tracking-widest uppercase">
-            Répartition
+            Allocation
           </p>
           {isOver && (
             <Badge variant="destructive" className="text-xs">
-              +{(allocatedPct - 100).toFixed(0)}% dépassement
+              +{(allocatedPct - 100).toFixed(0)}% over budget
             </Badge>
           )}
         </div>
         <Separator />
         <div className="flex items-center gap-5 p-4">
-          {/* Donut */}
           <Donut envelopes={envelopes} isOver={isOver} />
-
-          {/* Stats */}
           <div className="flex flex-1 flex-col gap-2.5">
             {[
               {
-                label: 'Reste à allouer',
+                label: 'Remaining',
                 main: fmt(remainingAmount),
-                sub: `${Math.max(0, remainingPct).toFixed(0)}% restant`,
+                sub: `${Math.max(0, remainingPct).toFixed(0)}% left`,
               },
               {
-                label: 'Disponible total',
+                label: 'Available',
                 main: fmt(freeAmount),
-                sub: 'après charges',
+                sub: 'after expenses',
               },
               {
-                label: 'Revenus bruts',
+                label: 'Gross income',
                 main: fmt(incomeVal),
-                sub: `− ${fmt(fixedVal)} charges`,
+                sub: `− ${fmt(fixedVal)} expenses`,
               },
             ].map(({ label, main, sub }) => (
               <div
@@ -371,8 +361,6 @@ export default function FinanceTool() {
                 </div>
               </div>
             ))}
-
-            {/* Barre */}
             <div className="bg-border mt-0.5 h-1 w-full overflow-hidden rounded-full">
               <div
                 className="h-full rounded-full transition-all duration-500"
@@ -388,12 +376,12 @@ export default function FinanceTool() {
         </div>
       </div>
 
-      {/* ── Enveloppes ── */}
+      {/* ── Envelopes ── */}
       <div className="overflow-hidden rounded-xl border">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
             <p className="text-muted-foreground text-xs font-medium tracking-widest uppercase">
-              Enveloppes
+              Envelopes
             </p>
             {envelopes.length > 0 && (
               <Badge
@@ -417,7 +405,7 @@ export default function FinanceTool() {
                   setFixed('')
                 }}
               >
-                Réinitialiser
+                Reset
               </Button>
             )}
             <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
@@ -437,7 +425,7 @@ export default function FinanceTool() {
                   >
                     <path d="M12 5v14M5 12h14" />
                   </svg>
-                  Ajouter
+                  Add
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-52 p-2" align="end">
@@ -474,7 +462,7 @@ export default function FinanceTool() {
                   onClick={() => addEnvelope('', 0)}
                 >
                   <span>✏️</span>
-                  <span>Personnalisée…</span>
+                  <span>Custom…</span>
                 </Button>
               </PopoverContent>
             </Popover>
@@ -499,32 +487,29 @@ export default function FinanceTool() {
               </svg>
             </div>
             <div>
-              <p className="text-sm font-medium">Aucune enveloppe</p>
+              <p className="text-sm font-medium">No envelopes</p>
               <p className="text-muted-foreground mt-0.5 text-sm">
-                Clique sur{' '}
-                <span className="text-foreground font-medium">+ Ajouter</span>{' '}
-                pour commencer.
+                Click <span className="text-foreground font-medium">+ Add</span>{' '}
+                to get started.
               </p>
             </div>
           </div>
         ) : (
           <div className="p-2">
-            {/* En-têtes colonnes */}
             <div className="grid grid-cols-[10px_1fr_auto_76px_28px] items-center gap-3 px-2 pt-0.5 pb-1">
               <span />
               <span className="text-muted-foreground text-[10px] font-medium tracking-widest uppercase">
-                Nom
+                Name
               </span>
               <span className="text-muted-foreground text-[10px] font-medium tracking-widest uppercase">
-                Montant
+                Amount
               </span>
               <span className="text-muted-foreground text-right text-[10px] font-medium tracking-widest uppercase">
-                Part
+                Share
               </span>
               <span />
             </div>
             <Separator className="mb-1" />
-
             {envelopes.map((env, i) => (
               <EnvelopeRow
                 key={env.id}
@@ -535,8 +520,6 @@ export default function FinanceTool() {
                 onDelete={deleteEnvelope}
               />
             ))}
-
-            {/* Total */}
             <Separator className="mt-1" />
             <div className="grid grid-cols-[10px_1fr_auto_76px_28px] items-center gap-3 px-2 py-2">
               <span />

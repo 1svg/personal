@@ -20,6 +20,7 @@ interface Props {
 }
 
 const { items } = Astro.props
+const lastIndex = items.length - 1
 ---
 
 <Breadcrumb>
@@ -30,26 +31,22 @@ const { items } = Astro.props
       </BreadcrumbLink>
     </BreadcrumbItem>
     {
-      items.map((item, index) => (
+      items.map(({ href, label, icon }, index) => (
         <>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            {index === items.length - 1 ? (
+            {index === lastIndex ? (
               <BreadcrumbPage>
                 <span class="flex items-center gap-x-2">
-                  {item.icon && (
-                    <Icon name={item.icon} class="size-4 shrink-0" />
-                  )}
-                  <span>{item.label}</span>
+                  {icon && <Icon name={icon} class="size-4 shrink-0" />}
+                  <span>{label}</span>
                 </span>
               </BreadcrumbPage>
             ) : (
-              <BreadcrumbLink href={item.href}>
+              <BreadcrumbLink href={href}>
                 <span class="flex items-center gap-x-2">
-                  {item.icon && (
-                    <Icon name={item.icon} class="size-4 shrink-0" />
-                  )}
-                  <span>{item.label}</span>
+                  {icon && <Icon name={icon} class="size-4 shrink-0" />}
+                  <span>{label}</span>
                 </span>
               </BreadcrumbLink>
             )}

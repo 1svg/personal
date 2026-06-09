@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { Avatar as AvatarPrimitive } from 'radix-ui'
-
 import { cn } from '@/lib/utils'
+
+// ─── Primitives ───────────────────────────────────────────────────────────────
 
 function Avatar({
   className,
@@ -48,21 +49,7 @@ function AvatarFallback({
   )
 }
 
-const AvatarComponent: React.FC<AvatarComponentProps> = ({
-  src,
-  alt,
-  fallback,
-  className,
-}) => {
-  return (
-    <Avatar className={className}>
-      <AvatarImage src={src} alt={alt} />
-      <AvatarFallback>{fallback}</AvatarFallback>
-    </Avatar>
-  )
-}
-
-export default AvatarComponent
+// ─── Compound component ───────────────────────────────────────────────────────
 
 interface AvatarComponentProps {
   src?: string
@@ -71,4 +58,17 @@ interface AvatarComponentProps {
   className?: string
 }
 
+const AvatarComponent: React.FC<AvatarComponentProps> = ({
+  src,
+  alt,
+  fallback,
+  className,
+}) => (
+  <Avatar className={className}>
+    <AvatarImage src={src} alt={alt} />
+    <AvatarFallback>{fallback}</AvatarFallback>
+  </Avatar>
+)
+
+export default AvatarComponent
 export { Avatar, AvatarImage, AvatarFallback }

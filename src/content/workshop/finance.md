@@ -1,8 +1,8 @@
 ---
 name: Finance
-description: Outil simple pour répartir le reste disponible de ton budget en enveloppes par pourcentage.
+description: A simple tool to allocate your available budget into percentage-based envelopes.
 icon: lucide:wallet
 date: 2026-06-02
 ---
 
-Répartis ton reste disponible entre plusieurs enveloppes en pourcentage.
+Allocate your available budget across multiple envelopes by percentage.

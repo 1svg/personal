@@ -17,13 +17,12 @@ import { Icon } from 'astro-icon/components'
 
 <script is:inline data-astro-rerun>
   ;(() => {
-    const theme = (() => {
-      const stored = localStorage?.getItem('theme') ?? ''
-      if (['dark', 'light'].includes(stored)) return stored
-      return window.matchMedia('(prefers-color-scheme: dark)').matches
+    const stored = localStorage?.getItem('theme') ?? ''
+    const theme = ['dark', 'light'].includes(stored)
+      ? stored
+      : window.matchMedia('(prefers-color-scheme: dark)').matches
         ? 'dark'
         : 'light'
-    })()
 
     document.documentElement.setAttribute('data-theme', theme)
     window.localStorage.setItem('theme', theme)
@@ -31,20 +30,19 @@ import { Icon } from 'astro-icon/components'
 </script>
 
 <script>
+  const el = document.documentElement
+
+  function applyTheme(theme: string) {
+    el.classList.add('[&_*]:transition-none')
+    el.setAttribute('data-theme', theme)
+    window.getComputedStyle(el).getPropertyValue('opacity')
+    requestAnimationFrame(() => el.classList.remove('[&_*]:transition-none'))
+    localStorage.setItem('theme', theme)
+  }
+
   function handleToggleClick() {
-    const element = document.documentElement
-    const currentTheme = element.getAttribute('data-theme')
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark'
-
-    element.classList.add('[&_*]:transition-none')
-    element.setAttribute('data-theme', newTheme)
-    window.getComputedStyle(element).getPropertyValue('opacity')
-
-    requestAnimationFrame(() => {
-      element.classList.remove('[&_*]:transition-none')
-    })
-
-    localStorage.setItem('theme', newTheme)
+    const newTheme = el.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
+    applyTheme(newTheme)
   }
 
   function initThemeToggle() {
@@ -56,17 +54,7 @@ import { Icon } from 'astro-icon/components'
   initThemeToggle()
 
   document.addEventListener('astro:after-swap', () => {
-    const storedTheme = localStorage.getItem('theme') || 'light'
-    const element = document.documentElement
-
-    element.classList.add('[&_*]:transition-none')
-    window.getComputedStyle(element).getPropertyValue('opacity')
-    element.setAttribute('data-theme', storedTheme)
-
-    requestAnimationFrame(() => {
-      element.classList.remove('[&_*]:transition-none')
-    })
-
+    applyTheme(localStorage.getItem('theme') ?? 'light')
     initThemeToggle()
   })
 </script>
