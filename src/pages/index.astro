@@ -8,7 +8,7 @@ import Layout from '@/layouts/layout.astro'
 import { getCollection, getEntry } from 'astro:content'
 
 const author = await getEntry('user', '1svg')
-if (!author) throw new Error('Auteur introuvable')
+if (!author) throw new Error('Author not found')
 
 const tools = await getCollection('workshop', ({ data }) => !data.draft)
 tools.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
@@ -16,7 +16,7 @@ const recentTools = tools.slice(0, 3)
 ---
 
 <Layout class="max-w-3xl">
-  <PageHead slot="head" title="Accueil" />
+  <PageHead slot="head" title="Home" />
 
   <AuthorCard author={author} />
 
@@ -36,7 +36,7 @@ const recentTools = tools.slice(0, 3)
         href="/workshop"
         class={buttonVariants({ variant: 'ghost' }) + ' group'}
       >
-        Voir le workshop <span
+        View workshop <span
           class="ml-1.5 transition-transform group-hover:translate-x-1"
           >&rarr;</span
         >
